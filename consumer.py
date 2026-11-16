@@ -16,12 +16,14 @@ class Consumer:
         PARAMETERS:
         - q : the shared queue (simulated topic)
 
-        TODO:
+        TODO: 
         - Store the queue.
         - Initialize any state variables you may want later,
           e.g. a running total for stateful computations.
         """
-        
+
+        self.q = q
+        self.running_total = 0
 
     def start(self):
         """
@@ -32,7 +34,11 @@ class Consumer:
         - Print the event received.
         - Pass it to the process() function.
         """
-    
+        while True:
+            event = self.q.get()
+            print(f"Received event: {event}")
+            self.process(event)
+
 
     def process(self, event):
         """
@@ -42,7 +48,13 @@ class Consumer:
         - Implement optional filtering conditions.
         - Update any state (example: running total).
         """
-   
+        time.sleep(1)  # Simulate processing time
+        event['amount'] = float(event['amount'])  # Transform field
+        if event['amount'] > 100:  # Optional filtering
+            self.running_total += event['amount']
+            print(f"Processed event: {event}")
+            print(f"Running total: {self.running_total}")
+
 
 # Debugging test
 
